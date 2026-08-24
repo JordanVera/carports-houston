@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Building2, Home } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
+import { PhotoCard } from "@/components/media/photo-card";
 import { CtaSection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { commercialServices, residentialServices } from "@/lib/content";
+import { siteImages } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -21,8 +16,16 @@ export const metadata: Metadata = {
 };
 
 const serviceSections = [
-  { ...residentialServices, icon: Home },
-  { ...commercialServices, icon: Building2 },
+  {
+    ...residentialServices,
+    image: siteImages.residentialService,
+    imageClassName: "object-[50%_35%]",
+  },
+  {
+    ...commercialServices,
+    image: siteImages.commercialService,
+    imageClassName: "object-[40%_50%]",
+  },
 ];
 
 export default function ServicesPage() {
@@ -31,40 +34,24 @@ export default function ServicesPage() {
       <PageHeader
         title="Quality Metal Structures"
         subtitle="Expert carport and metal building services for residential and commercial needs in Houston."
+        image={siteImages.commercialCanopy.src}
+        imageAlt={siteImages.commercialCanopy.alt}
+        imageClassName="object-[40%_45%]"
       />
 
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-8 lg:grid-cols-2">
-            {serviceSections.map((section) => {
-              const Icon = section.icon;
-              return (
-                <Card key={section.title} className="border-border/80">
-                  <CardHeader>
-                    <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <Icon className="size-5" />
-                    </div>
-                    <CardTitle className="font-heading text-2xl">{section.title}</CardTitle>
-                    <CardDescription className="text-base leading-relaxed">
-                      {section.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {section.items.map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-center gap-2 text-sm text-muted-foreground"
-                        >
-                          <span className="size-1.5 shrink-0 rounded-full bg-primary" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {serviceSections.map((section) => (
+              <PhotoCard
+                key={section.title}
+                image={section.image}
+                title={section.title}
+                description={section.description}
+                items={section.items}
+                imageClassName={section.imageClassName}
+              />
+            ))}
           </div>
 
           <div className="mt-12 flex flex-col gap-3 sm:flex-row">

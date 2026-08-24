@@ -1,4 +1,4 @@
-import { Award, Hammer } from "lucide-react";
+import { Award, Flag, Hammer } from 'lucide-react';
 
 import {
   Card,
@@ -6,16 +6,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { stats } from "@/lib/content";
+} from '@/components/ui/card';
+import { stats } from '@/lib/content';
 
-const icons = [Hammer, Award];
+const icons = [Hammer, Award, Flag];
 
 export function StatsSection() {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-3">
           {stats.map((stat, index) => {
             const Icon = icons[index] ?? Hammer;
             return (
@@ -37,7 +37,9 @@ export function StatsSection() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">{stat.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {stat.description}
+                  </p>
                 </CardContent>
               </Card>
             );

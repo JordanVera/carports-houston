@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { CheckCircle2, Mail, MapPin, Phone } from "lucide-react";
 
 import { PageHeader } from "@/components/sections/page-header";
@@ -16,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contactContent, siteConfig } from "@/lib/content";
+import { siteImages } from "@/lib/images";
 
 type FormState = {
   name: string;
@@ -67,7 +69,13 @@ export function ContactForm() {
 
   return (
     <>
-      <PageHeader title={contactContent.title} subtitle={contactContent.subtitle} />
+      <PageHeader
+        title={contactContent.title}
+        subtitle={contactContent.subtitle}
+        image={siteImages.restaurantPatio.src}
+        imageAlt={siteImages.restaurantPatio.alt}
+        imageClassName="object-[50%_40%]"
+      />
 
       <section className="py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 lg:grid-cols-[1.4fr_1fr]">
@@ -165,6 +173,17 @@ export function ContactForm() {
           </Card>
 
           <div className="space-y-6">
+            <div className="relative aspect-4/3 overflow-hidden rounded-xl ring-1 ring-foreground/10">
+              <Image
+                src={siteImages.outdoorDining.src}
+                alt={siteImages.outdoorDining.alt}
+                fill
+                placeholder="blur"
+                className="object-cover object-[50%_40%]"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+            </div>
+
             <Card className="border-border/80">
               <CardHeader>
                 <CardTitle className="font-heading text-lg">Call Us</CardTitle>

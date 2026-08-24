@@ -1,4 +1,5 @@
 import { CtaSection } from '@/components/sections/cta-section';
+import { FeaturedWorkSection } from '@/components/sections/featured-work-section';
 import { HeroSection } from '@/components/sections/hero-section';
 import { ServicesGrid } from '@/components/sections/services-grid';
 import { StatsSection } from '@/components/sections/stats-section';
@@ -8,6 +9,7 @@ export default function Home() {
     <>
       <HeroSection />
       <StatsSection />
+      <FeaturedWorkSection />
       <ServicesGrid />
       <CtaSection
         title="Quality Metal Structures"

@@ -46,6 +46,26 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --animate-ken-burns: ken-burns 22s ease-in-out infinite alternate;
+  --animate-ken-burns-alt: ken-burns-alt 22s ease-in-out infinite alternate;
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.18) translate3d(-3.5%, -2%, 0);
+  }
+}
+
+@keyframes ken-burns-alt {
+  from {
+    transform: scale(1.16) translate3d(2%, -1.5%, 0);
+  }
+  to {
+    transform: scale(1.05) translate3d(-2%, 1.5%, 0);
+  }
 }
 
 :root {

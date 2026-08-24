@@ -29,6 +29,11 @@ export const stats = [
     label: 'Years of Experience',
     description: 'Trusted metal structure experts',
   },
+  {
+    value: 'USA',
+    label: 'Made Materials',
+    description: 'Premium American metal products',
+  },
 ] as const;
 
 export const homeHero = {
@@ -43,11 +48,25 @@ export const servicesPreview = [
     title: 'Residential Metal Buildings',
     description:
       'Custom-designed metal buildings for homes, ensuring durability and aesthetic appeal tailored to your needs.',
+    image: 'residentialService' as const,
+    items: [
+      'Custom carports',
+      'Patio covers',
+      'Pergolas & awnings',
+      'RV covers',
+    ],
   },
   {
     title: 'Commercial Metal Solutions',
     description:
       'Robust metal structures for businesses, providing reliable and efficient solutions for your commercial projects.',
+    image: 'commercialService' as const,
+    items: [
+      'Parking structures',
+      'Cantilever carports',
+      'Aircraft hangars',
+      'Commercial roofing',
+    ],
   },
 ] as const;
 
@@ -110,12 +129,17 @@ export const trustHighlights = [
   },
 ] as const;
 
-export const galleryImages = Array.from({ length: 13 }, (_, i) => ({
-  id: i + 1,
-  src: `/images/gallery/ex-${i + 1}.webp`,
-  alt: `Metal structure project ${i + 1}`,
-  label: `Project ${i + 1}`,
-}));
+export const featuredProject = {
+  badge: 'Featured Project',
+  title: 'Commercial metal buildings built to last',
+  description:
+    'From storefront canopies to full commercial shells, we design and install metal structures that stand up to Gulf Coast weather and keep your property working.',
+  highlights: [
+    'Engineered for Houston wind and weather',
+    'USA-made steel and fasteners',
+    'Custom sizes, colors, and layouts',
+  ],
+};
 
 export const contactContent = {
   title: 'Contact Us',

@@ -1,8 +1,9 @@
-import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import Link from 'next/link';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
-import { Separator } from "@/components/ui/separator";
-import { navLinks, siteConfig } from "@/lib/content";
+import { SiteLogo } from '@/components/layout/site-logo';
+import { Separator } from '@/components/ui/separator';
+import { navLinks, siteConfig } from '@/lib/content';
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -12,7 +13,13 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="grid gap-10 md:grid-cols-3">
           <div className="space-y-4">
-            <p className="font-heading text-lg font-semibold">{siteConfig.name}</p>
+            <Link
+              href="/"
+              aria-label={siteConfig.name}
+              className="inline-flex rounded-md outline-offset-4 transition-opacity hover:opacity-80"
+            >
+              <SiteLogo />
+            </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               {siteConfig.description}
             </p>
