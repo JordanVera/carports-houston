@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import { MobileCtaBar } from '@/components/layout/mobile-cta-bar';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
 import { ThemeProvider } from '@/components/layout/theme-provider';
@@ -17,6 +18,10 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
+
+export const viewport: Viewport = {
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   title: {
@@ -44,6 +49,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
+          <MobileCtaBar />
         </ThemeProvider>
       </body>
     </html>
