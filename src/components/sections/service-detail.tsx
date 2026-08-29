@@ -27,7 +27,8 @@ type ServiceDetailProps = {
 
 export function ServiceDetail({ service }: ServiceDetailProps) {
   const images = getServiceImages(service);
-  const [hero, secondary] = images;
+  const hero = images[0];
+  const contentImage = images[1] ?? images[0];
   const related = getRelatedServices(service);
   const category = serviceCategories[service.category];
 
@@ -48,7 +49,10 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
           >
             <ol className="flex flex-wrap items-center gap-2">
               <li>
-                <Link href="/" className="transition-colors hover:text-foreground">
+                <Link
+                  href="/"
+                  className="transition-colors hover:text-foreground"
+                >
                   Home
                 </Link>
               </li>
@@ -76,7 +80,7 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
               ))}
               <div className="flex flex-col gap-3 pt-2 sm:flex-row">
                 <Button asChild>
-                  <Link href="/contact">
+                  <Link href={`/contact?service=${service.slug}`}>
                     Request a Free Quote
                     <ArrowRight className="size-4" />
                   </Link>
@@ -87,11 +91,11 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
               </div>
             </div>
 
-            {secondary ? (
+            {contentImage ? (
               <div className="relative aspect-4/3 overflow-hidden rounded-2xl ring-1 ring-foreground/10">
                 <Image
-                  src={secondary.src}
-                  alt={secondary.alt}
+                  src={contentImage.src}
+                  alt={contentImage.alt}
                   fill
                   placeholder="blur"
                   className="object-cover"

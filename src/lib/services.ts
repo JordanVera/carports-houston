@@ -61,7 +61,7 @@ const services: readonly Service[] = [
           'Yes. We install residential metal carports with USA-made steel and fasteners selected for Houston heat, humidity, and wind. A properly anchored custom carport is built to stay put through typical Gulf Coast weather.',
       },
     ],
-    imageKeys: ['residentialCarport', 'customBuilding'],
+    imageKeys: ['residentialCarport'],
     related: ['rv-covers', 'patio-covers', 'metal-buildings'],
   },
   {

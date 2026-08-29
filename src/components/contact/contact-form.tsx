@@ -1,54 +1,65 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { CheckCircle2, Mail, MapPin, Phone } from "lucide-react";
+import { useState } from 'react';
+import { ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 
-import { PageHeader } from "@/components/sections/page-header";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { contactContent, siteConfig } from "@/lib/content";
-import { siteImages } from "@/lib/images";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { siteConfig } from '@/lib/content';
+import { getServiceNavGroups } from '@/lib/services';
+import { cn } from '@/lib/utils';
 
 type FormState = {
-  name: string;
-  email: string;
+  firstName: string;
+  lastName: string;
   phone: string;
+  email: string;
+  address: string;
+  service: string;
   message: string;
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
 const initialForm: FormState = {
-  name: "",
-  email: "",
-  phone: "",
-  message: "",
+  firstName: '',
+  lastName: '',
+  phone: '',
+  email: '',
+  address: '',
+  service: '',
+  message: '',
 };
 
-export function ContactForm() {
-  const [form, setForm] = useState<FormState>(initialForm);
+const fieldClassName = 'h-11 px-3';
+
+type ContactFormProps = {
+  initialService?: string;
+};
+
+export function ContactForm({ initialService = '' }: ContactFormProps) {
+  const [form, setForm] = useState<FormState>({
+    ...initialForm,
+    service: initialService,
+  });
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const serviceGroups = getServiceNavGroups();
 
   const validate = (): FormErrors => {
     const next: FormErrors = {};
-    if (!form.name.trim()) next.name = "Name is required";
+    if (!form.firstName.trim()) next.firstName = 'First name is required';
+    if (!form.lastName.trim()) next.lastName = 'Last name is required';
+    if (!form.phone.trim()) next.phone = 'Phone number is required';
     if (!form.email.trim()) {
-      next.email = "Email is required";
+      next.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      next.email = "Enter a valid email address";
+      next.email = 'Enter a valid email address';
     }
-    if (!form.message.trim()) next.message = "Message is required";
+    if (!form.service) next.service = 'Select a service';
+    if (!form.message.trim()) next.message = 'Project details are required';
     return next;
   };
 
@@ -67,167 +78,168 @@ export function ContactForm() {
     }
   };
 
-  return (
-    <>
-      <PageHeader
-        title={contactContent.title}
-        subtitle={contactContent.subtitle}
-        image={siteImages.restaurantPatio.src}
-        imageAlt={siteImages.restaurantPatio.alt}
-        imageClassName="object-[50%_40%]"
-      />
-
-      <section className="py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 lg:grid-cols-[1.4fr_1fr]">
-          <Card className="border-border/80">
-            <CardHeader>
-              <CardTitle className="font-heading text-2xl">Send a Message</CardTitle>
-              <CardDescription>
-                Fill out the form below and we&apos;ll get back to you as soon as possible.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {submitted ? (
-                <div className="flex flex-col items-center gap-4 py-12 text-center">
-                  <CheckCircle2 className="size-12 text-primary" />
-                  <div>
-                    <p className="text-lg font-semibold">Message received!</p>
-                    <p className="mt-2 text-muted-foreground">
-                      Thank you for reaching out. For immediate assistance, call us at{" "}
-                      <a
-                        href={siteConfig.phoneHref}
-                        className="font-medium text-primary hover:underline"
-                      >
-                        {siteConfig.phone}
-                      </a>
-                      .
-                    </p>
-                  </div>
-                  <Button variant="outline" onClick={() => setSubmitted(false)}>
-                    Send another message
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Contact Name</Label>
-                    <Input
-                      id="name"
-                      value={form.name}
-                      onChange={(e) => updateField("name", e.target.value)}
-                      aria-invalid={!!errors.name}
-                      placeholder="Your name"
-                    />
-                    {errors.name && (
-                      <p className="text-sm text-destructive">{errors.name}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={form.email}
-                      onChange={(e) => updateField("email", e.target.value)}
-                      aria-invalid={!!errors.email}
-                      placeholder="you@example.com"
-                    />
-                    {errors.email && (
-                      <p className="text-sm text-destructive">{errors.email}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={form.phone}
-                      onChange={(e) => updateField("phone", e.target.value)}
-                      placeholder="(281) 555-0123"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea
-                      id="message"
-                      rows={5}
-                      value={form.message}
-                      onChange={(e) => updateField("message", e.target.value)}
-                      aria-invalid={!!errors.message}
-                      placeholder="Tell us about your project..."
-                    />
-                    {errors.message && (
-                      <p className="text-sm text-destructive">{errors.message}</p>
-                    )}
-                  </div>
-
-                  <Button type="submit" size="lg" className="w-full sm:w-auto">
-                    Submit Your Inquiry
-                  </Button>
-                </form>
-              )}
-            </CardContent>
-          </Card>
-
-          <div className="space-y-6">
-            <div className="relative aspect-4/3 overflow-hidden rounded-xl ring-1 ring-foreground/10">
-              <Image
-                src={siteImages.outdoorDining.src}
-                alt={siteImages.outdoorDining.alt}
-                fill
-                placeholder="blur"
-                className="object-cover object-[50%_40%]"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-            </div>
-
-            <Card className="border-border/80">
-              <CardHeader>
-                <CardTitle className="font-heading text-lg">Call Us</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <a
-                  href={siteConfig.phoneHref}
-                  className="inline-flex items-center gap-2 text-lg font-medium text-primary transition-colors hover:underline"
-                >
-                  <Phone className="size-5" />
-                  {siteConfig.phone}
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/80">
-              <CardHeader>
-                <CardTitle className="font-heading text-lg">Email Us</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <a
-                  href={siteConfig.emailHref}
-                  className="inline-flex items-center gap-2 text-primary transition-colors hover:underline"
-                >
-                  <Mail className="size-5 shrink-0" />
-                  {siteConfig.email}
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/80">
-              <CardHeader>
-                <CardTitle className="font-heading text-lg">Service Area</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="inline-flex items-center gap-2 text-muted-foreground">
-                  <MapPin className="size-5 shrink-0 text-primary" />
-                  {siteConfig.serviceArea}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+  if (submitted) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-12 text-center">
+        <CheckCircle2 className="size-12 text-primary" />
+        <div>
+          <p className="text-lg font-semibold">Quote request received</p>
+          <p className="mt-2 text-muted-foreground">
+            Thank you for reaching out. We typically respond within a few hours.
+            For immediate help, call{' '}
+            <a
+              href={siteConfig.phoneHref}
+              className="font-medium text-primary hover:underline"
+            >
+              {siteConfig.phone}
+            </a>
+            .
+          </p>
         </div>
-      </section>
-    </>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setSubmitted(false);
+            setForm({ ...initialForm, service: initialService });
+          }}
+        >
+          Send another request
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field
+          id="firstName"
+          label="First name"
+          error={errors.firstName}
+        >
+          <Input
+            id="firstName"
+            autoComplete="given-name"
+            value={form.firstName}
+            onChange={(event) => updateField('firstName', event.target.value)}
+            aria-invalid={!!errors.firstName}
+            className={fieldClassName}
+          />
+        </Field>
+        <Field id="lastName" label="Last name" error={errors.lastName}>
+          <Input
+            id="lastName"
+            autoComplete="family-name"
+            value={form.lastName}
+            onChange={(event) => updateField('lastName', event.target.value)}
+            aria-invalid={!!errors.lastName}
+            className={fieldClassName}
+          />
+        </Field>
+        <Field id="phone" label="Phone number" error={errors.phone}>
+          <Input
+            id="phone"
+            type="tel"
+            autoComplete="tel"
+            value={form.phone}
+            onChange={(event) => updateField('phone', event.target.value)}
+            aria-invalid={!!errors.phone}
+            placeholder="(281) 555-0123"
+            className={fieldClassName}
+          />
+        </Field>
+        <Field id="email" label="Email" error={errors.email}>
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            value={form.email}
+            onChange={(event) => updateField('email', event.target.value)}
+            aria-invalid={!!errors.email}
+            placeholder="you@example.com"
+            className={fieldClassName}
+          />
+        </Field>
+      </div>
+
+      <Field id="address" label="Property address">
+        <Input
+          id="address"
+          autoComplete="street-address"
+          value={form.address}
+          onChange={(event) => updateField('address', event.target.value)}
+          placeholder="Street address, Houston TX"
+          className={fieldClassName}
+        />
+      </Field>
+
+      <Field id="service" label="Service needed" error={errors.service}>
+        <select
+          id="service"
+          value={form.service}
+          onChange={(event) => updateField('service', event.target.value)}
+          aria-invalid={!!errors.service}
+          className={cn(
+            'h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 text-sm outline-none transition-colors',
+            'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+            'aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20',
+            'dark:bg-input/30',
+            !form.service && 'text-muted-foreground',
+          )}
+        >
+          <option value="">Select a service</option>
+          {serviceGroups.map((group) => (
+            <optgroup key={group.category} label={group.label}>
+              {group.items.map((item) => (
+                <option key={item.href} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </Field>
+
+      <Field id="message" label="Project details" error={errors.message}>
+        <Textarea
+          id="message"
+          rows={6}
+          value={form.message}
+          onChange={(event) => updateField('message', event.target.value)}
+          aria-invalid={!!errors.message}
+          placeholder="Describe your project — what you need built, the size of the space, timeline, or any specifics."
+          className="min-h-32 px-3"
+        />
+      </Field>
+
+      <Button type="submit" size="lg" className="h-12 w-full text-base">
+        Get my free quote
+        <ArrowRight className="size-4" />
+      </Button>
+      <p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
+        <Clock className="size-3.5 shrink-0" />
+        We typically respond within a few hours. No obligation, no pressure.
+      </p>
+    </form>
+  );
+}
+
+function Field({
+  id,
+  label,
+  error,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      {children}
+      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+    </div>
   );
 }

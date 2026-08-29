@@ -8,6 +8,10 @@ export const siteConfig = {
   email: 'carportsunlimited@yahoo.com',
   emailHref: 'mailto:carportsunlimited@yahoo.com',
   serviceArea: 'Texas Gulf Coast Region',
+  hours: [
+    { days: 'Monday – Friday', time: '7:00 AM – 6:00 PM' },
+    { days: 'Saturday', time: '8:00 AM – 4:00 PM' },
+  ],
 };
 
 export const navLinks = [
@@ -71,7 +75,7 @@ export const servicesPreview = [
 ] as const;
 
 export const residentialServices = {
-  title: 'Residential Metal Buildings',
+  title: 'Residential Metal Solutions',
   description:
     'Custom-designed metal buildings for homes, ensuring durability and aesthetic appeal tailored to your needs.',
   items: [
@@ -142,6 +146,15 @@ export const featuredProject = {
 };
 
 export const contactContent = {
-  title: 'Contact Us',
-  subtitle: 'Get in touch for your metal building needs today!',
+  title: 'Tell us about your project',
+  subtitle: 'Get a free quote for a custom metal structure in Houston.',
 };
+
+export const contactExpectations = [
+  'Quick response — typically within a few hours',
+  'Honest, accurate estimate upfront',
+  'No hidden fees, no pressure',
+  'USA-made steel and materials',
+  'Residential and commercial welcome',
+  'Serving Houston and the Texas Gulf Coast',
+] as const;
