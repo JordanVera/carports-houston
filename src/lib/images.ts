@@ -13,6 +13,14 @@ import gallery10 from '../../public/images/gallery/ex-10.webp';
 import gallery11 from '../../public/images/gallery/ex-11.webp';
 import gallery12 from '../../public/images/gallery/ex-12.webp';
 import gallery13 from '../../public/images/gallery/ex-13.webp';
+import servicePergola from '../../public/images/services/pergola.webp';
+import serviceRvCover from '../../public/images/services/rv-cover.webp';
+import serviceCantileverCarport from '../../public/images/services/cantilever-carport.webp';
+import serviceApartmentCovers from '../../public/images/services/apartment-covers.webp';
+import serviceRidingArena from '../../public/images/services/riding-arena.webp';
+import serviceAircraftHangar from '../../public/images/services/aircraft-hangar.webp';
+import serviceCarWashShelter from '../../public/images/services/car-wash-shelter.webp';
+import serviceCommercialRoofing from '../../public/images/services/commercial-roofing.webp';
 
 export type SiteImage = {
   src: StaticImageData;
@@ -96,6 +104,46 @@ const photos = {
     gallery13,
     'Custom metal building',
     'Custom two-tone metal building under construction',
+  ),
+  pergola: image(
+    servicePergola,
+    'Residential metal pergola',
+    'Custom metal pergola over a Houston backyard patio',
+  ),
+  rvCover: image(
+    serviceRvCover,
+    'Residential RV cover',
+    'Tall metal RV cover sheltering a motorhome in a Houston driveway',
+  ),
+  cantileverCarport: image(
+    serviceCantileverCarport,
+    'Cantilever carport',
+    'Commercial cantilever metal carport covering a parking aisle',
+  ),
+  apartmentCovers: image(
+    serviceApartmentCovers,
+    'Apartment covered parking',
+    'Rows of metal apartment covers beside a Houston multifamily building',
+  ),
+  ridingArena: image(
+    serviceRidingArena,
+    'Covered riding arena',
+    'Wide-span metal riding arena on a Texas ranch',
+  ),
+  aircraftHangar: image(
+    serviceAircraftHangar,
+    'Aircraft hangar',
+    'Custom steel aircraft hangar at a Houston-area airfield',
+  ),
+  carWashShelter: image(
+    serviceCarWashShelter,
+    'Car wash shelter',
+    'Open metal car wash shelter canopy over a wash bay',
+  ),
+  commercialRoofing: image(
+    serviceCommercialRoofing,
+    'Commercial metal roofing',
+    'Finished standing-seam commercial metal roof on a Houston building',
   ),
 } as const;
 

@@ -14,14 +14,24 @@ import {
 import type { SiteImage } from "@/lib/images";
 import { cn } from "@/lib/utils";
 
+export type PhotoCardItem = string | { label: string; href: string };
+
 type PhotoCardProps = {
   image: SiteImage;
   title: string;
   description: string;
-  items: readonly string[];
+  items: readonly PhotoCardItem[];
   href?: string;
   imageClassName?: string;
 };
+
+function itemLabel(item: PhotoCardItem) {
+  return typeof item === 'string' ? item : item.label;
+}
+
+function itemHref(item: PhotoCardItem) {
+  return typeof item === 'string' ? undefined : item.href;
+}
 
 export function PhotoCard({
   image,
@@ -49,12 +59,26 @@ export function PhotoCard({
       </CardHeader>
       <CardContent className="flex-1">
         <ul className="grid gap-2 sm:grid-cols-2">
-          {items.map((item) => (
-            <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span className="size-1.5 shrink-0 rounded-full bg-primary" />
-              {item}
-            </li>
-          ))}
+          {items.map((item) => {
+            const label = itemLabel(item);
+            const itemUrl = itemHref(item);
+
+            return (
+              <li key={label} className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="size-1.5 shrink-0 rounded-full bg-primary" />
+                {itemUrl ? (
+                  <Link
+                    href={itemUrl}
+                    className="transition-colors hover:text-foreground hover:underline"
+                  >
+                    {label}
+                  </Link>
+                ) : (
+                  label
+                )}
+              </li>
+            );
+          })}
         </ul>
       </CardContent>
       {href ? (

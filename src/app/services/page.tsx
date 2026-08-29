@@ -8,23 +8,37 @@ import { PageHeader } from "@/components/sections/page-header";
 import { Button } from "@/components/ui/button";
 import { commercialServices, residentialServices } from "@/lib/content";
 import { siteImages } from "@/lib/images";
+import {
+  getServiceHref,
+  getServicesByCategory,
+} from "@/lib/services";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Metal Building Services in Houston",
   description:
-    "Residential and commercial metal building services from Carports Houston — carports, patio covers, hangars, and more.",
+    "Residential and commercial metal building services in Houston: custom carports, patio covers, RV covers, parking structures, hangars, and commercial roofing.",
 };
 
 const serviceSections = [
   {
     ...residentialServices,
+    id: "residential" as const,
     image: siteImages.residentialService,
     imageClassName: "object-[50%_35%]",
+    items: getServicesByCategory("residential").map((service) => ({
+      label: service.name,
+      href: getServiceHref(service.slug),
+    })),
   },
   {
     ...commercialServices,
+    id: "commercial" as const,
     image: siteImages.commercialService,
     imageClassName: "object-[40%_50%]",
+    items: getServicesByCategory("commercial").map((service) => ({
+      label: service.name,
+      href: getServiceHref(service.slug),
+    })),
   },
 ];
 
@@ -43,14 +57,15 @@ export default function ServicesPage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-8 lg:grid-cols-2">
             {serviceSections.map((section) => (
-              <PhotoCard
-                key={section.title}
-                image={section.image}
-                title={section.title}
-                description={section.description}
-                items={section.items}
-                imageClassName={section.imageClassName}
-              />
+              <div key={section.title} id={section.id} className="scroll-mt-24">
+                <PhotoCard
+                  image={section.image}
+                  title={section.title}
+                  description={section.description}
+                  items={section.items}
+                  imageClassName={section.imageClassName}
+                />
+              </div>
             ))}
           </div>
 

@@ -1,6 +1,10 @@
 import { PhotoCard } from "@/components/media/photo-card";
 import { servicesPreview } from "@/lib/content";
 import { getSiteImage } from "@/lib/images";
+import {
+  getServiceHref,
+  getServicesByCategory,
+} from "@/lib/services";
 
 export function ServicesGrid() {
   return (
@@ -23,7 +27,14 @@ export function ServicesGrid() {
               image={getSiteImage(service.image)}
               title={service.title}
               description={service.description}
-              items={service.items}
+              items={getServicesByCategory(
+                service.image === "commercialService"
+                  ? "commercial"
+                  : "residential",
+              ).map((item) => ({
+                label: item.name,
+                href: getServiceHref(item.slug),
+              }))}
               href="/services"
               imageClassName={
                 service.image === "commercialService"

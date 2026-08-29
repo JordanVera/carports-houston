@@ -4,6 +4,7 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { SiteLogo } from '@/components/layout/site-logo';
 import { Separator } from '@/components/ui/separator';
 import { navLinks, siteConfig } from '@/lib/content';
+import { getServiceNavGroups } from '@/lib/services';
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -11,7 +12,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-muted/30 pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
       <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <Link
               href="/"
@@ -23,6 +24,34 @@ export function SiteFooter() {
             <p className="text-sm leading-relaxed text-muted-foreground">
               {siteConfig.description}
             </p>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-sm font-semibold">Services</p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {getServiceNavGroups().map((group) => (
+                <div key={group.category} className="space-y-2">
+                  <Link
+                    href={group.href}
+                    className="text-sm font-medium text-foreground transition-colors hover:text-primary"
+                  >
+                    {group.label}
+                  </Link>
+                  <ul className="space-y-1.5">
+                    {group.items.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-4">
