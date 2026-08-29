@@ -28,20 +28,20 @@ export function GalleryGrid() {
         imageClassName="object-[40%_35%]"
       />
 
-      <section className="py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="grid auto-rows-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="py-20 sm:py-0">
+        <div className="mx-auto max-w-6xl px-6 sm:max-w-none sm:px-0">
+          <div className="grid auto-rows-auto grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-0 lg:grid-cols-3">
             {galleryImages.map((image, index) => (
               <button
                 key={image.id}
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 className={cn(
-                  "group relative overflow-hidden rounded-2xl ring-1 ring-foreground/10 transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "group relative overflow-hidden rounded-2xl ring-1 ring-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:rounded-none sm:ring-0",
                   index === 0
                     ? "aspect-16/10 sm:col-span-2 lg:col-span-3"
                     : image.orientation === "portrait"
-                      ? "aspect-3/4"
+                      ? "aspect-3/4 sm:aspect-4/3"
                       : "aspect-4/3",
                 )}
               >
@@ -54,7 +54,7 @@ export function GalleryGrid() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   sizes={
                     index === 0
-                      ? "(max-width: 1152px) 100vw, 1152px"
+                      ? "100vw"
                       : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   }
                 />
