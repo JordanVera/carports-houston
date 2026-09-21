@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { siteConfig } from '@/lib/content';
 import { getServiceNavGroups } from '@/lib/services';
 import { cn } from '@/lib/utils';
+
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${encodeURIComponent(siteConfig.email)}`;
 
 type FormState = {
   firstName: string;
@@ -35,6 +37,17 @@ const initialForm: FormState = {
 
 const fieldClassName = 'h-11 px-3';
 
+function buildEmailSubject(form: FormState) {
+  const name = `${form.firstName.trim()} ${form.lastName.trim()}`.trim();
+  const timestamp = new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'America/Chicago',
+  }).format(new Date());
+
+  return `Quote Request: ${name} — ${form.service} (${timestamp})`;
+}
+
 type ContactFormProps = {
   initialService?: string;
 };
@@ -46,6 +59,8 @@ export function ContactForm({ initialService = '' }: ContactFormProps) {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const serviceGroups = getServiceNavGroups();
 
   const validate = (): FormErrors => {
@@ -63,12 +78,55 @@ export function ContactForm({ initialService = '' }: ContactFormProps) {
     return next;
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const nextErrors = validate();
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
-    setSubmitted(true);
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          'First Name': form.firstName.trim(),
+          'Last Name': form.lastName.trim(),
+          Phone: form.phone.trim(),
+          Email: form.email.trim(),
+          Address: form.address.trim() || 'Not provided',
+          Service: form.service,
+          Message: form.message.trim(),
+          _subject: buildEmailSubject(form),
+          _replyto: form.email.trim(),
+          _template: 'table',
+        }),
+      });
+
+      const data = (await response.json()) as {
+        success?: string;
+        message?: string;
+      };
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message ?? 'Unable to send your request. Please try again.',
+        );
+      }
+
+      setSubmitted(true);
+    } catch {
+      setSubmitError(
+        'Something went wrong sending your request. Please try again or call us directly.',
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const updateField = (field: keyof FormState, value: string) => {
@@ -100,6 +158,7 @@ export function ContactForm({ initialService = '' }: ContactFormProps) {
           variant="outline"
           onClick={() => {
             setSubmitted(false);
+            setSubmitError(null);
             setForm({ ...initialForm, service: initialService });
           }}
         >
@@ -112,11 +171,7 @@ export function ContactForm({ initialService = '' }: ContactFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field
-          id="firstName"
-          label="First name"
-          error={errors.firstName}
-        >
+        <Field id="firstName" label="First name" error={errors.firstName}>
           <Input
             id="firstName"
             autoComplete="given-name"
@@ -212,9 +267,29 @@ export function ContactForm({ initialService = '' }: ContactFormProps) {
         />
       </Field>
 
-      <Button type="submit" size="lg" className="h-12 w-full text-base">
-        Get my free quote
-        <ArrowRight className="size-4" />
+      {submitError ? (
+        <p className="text-sm text-destructive" role="alert">
+          {submitError}
+        </p>
+      ) : null}
+
+      <Button
+        type="submit"
+        size="lg"
+        className="h-12 w-full text-base"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <>
+            <Loader2 className="size-4 animate-spin" />
+            Sending…
+          </>
+        ) : (
+          <>
+            Get my free quote
+            <ArrowRight className="size-4" />
+          </>
+        )}
       </Button>
       <p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
         <Clock className="size-3.5 shrink-0" />
