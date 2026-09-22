@@ -24,7 +24,7 @@ export const navLinks = [
 
 export const stats = [
   {
-    value: '250+',
+    value: '5,000+',
     label: 'Custom Projects',
     description: 'Completed across the Gulf Coast',
   },
